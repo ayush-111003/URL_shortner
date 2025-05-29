@@ -1,16 +1,14 @@
-import express from "express";
+const express = require("express");
+const urlRoute = require("./routes/url");
+const { connectToMongoDB } = require("./connect.js");
 
 const app = express();
 const port = 8001;
 
-//routes
-//return the shortend url
-app.get("/:id", (req, res) => {});
+connectToMongoDB("mongodb://127.0.0.1:27017/short-url").then(() => {
+  console.log("MongoDB connected");
+});
 
-//redirection to the original
-app.post("/url", (res, req) => {});
-
-//returns the clicks for the porvided url
-app.get("url/analytics/:id", (req, res) => {});
+app.use("/url", urlRoute);
 
 app.listen(port, () => console.log(`Server started at Port : ${port}`));
