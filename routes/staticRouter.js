@@ -7,7 +7,6 @@ router.get("/", async (req, res) => {
   try {
     const allurls = await URL.find({});
     console.log("Route accessed");
-    console.log("URLs found:", allurls);
     return res.render("home", {
       urls: allurls,
     });

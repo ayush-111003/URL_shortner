@@ -15,21 +15,6 @@
       p {
         font-size: 18px;
       }
-      table {
-        margin: 20px auto;
-        border-collapse: collapse;
-        width: 80%;
-      }
-      th,
-      td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      thead {
-        background-color: #4caf50;
-        color: white;
-      }
     </style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -39,6 +24,8 @@
     <h1>URL Shortner</h1>
 
     <% if (locals.id) { %>
+    <p>Short ID : <%= locals.id %></p>
+    <p>Original URL : <%= locals.redirectURL %></p>
     <p>URL Generated : http://localhost:8001/url/<%= id %></p>
     <% } %>
 
@@ -55,38 +42,37 @@
       </form>
     </div>
 
-    <div>
-      <pre><%= JSON.stringify(locals, null, 2) %></pre>
-      <%if (locals.urls) { %>
+    <!-- <div>
+      <% if (typeof urls !== 'undefined' && urls.length > 0) { %>
       <table>
         <thead>
           <tr>
             <th>S.no</th>
-            <th>ShortID</th>
-            <th>Redirect</th>
-            <th>Clicks</th>
+            <th>Redirect URL</th>
+            <th>Short IDs</th>
+            <th>Total Clicks</th>
           </tr>
         </thead>
         <tbody>
-          <% urls.forEach((url , index) =>{ %>
+          <% const groupedUrls = urls.reduce((acc, url) => { if
+          (!acc[url.redirectURL]) { acc[url.redirectURL] = { shortIds:
+          [url.shortId], clicks: url.visitHistory.length }; } else {
+          acc[url.redirectURL].shortIds.push(url.shortId);
+          acc[url.redirectURL].clicks += url.visitHistory.length; } return acc;
+          }, {}); Object.entries(groupedUrls).forEach(([redirectURL, data],
+          index) => { %>
           <tr>
             <td><%= index + 1 %></td>
-            <td>
-              <a href="/url/<%= url.shortId %>" target="_blank">
-                <%= url.shortId %>
-              </a>
-            </td>
-            <td>
-              <a href="<%= url.redirectURL %>" target="_blank">
-                <%= url.redirectURL %>
-              </a>
-            </td>
-            <td><%= url.visitHistory.length %></td>
+            <td><%= redirectURL %></td>
+            <td><%= data.shortIds.join(', ') %></td>
+            <td><%= data.clicks %></td>
           </tr>
-          <% }) %>
+          <% }); %>
         </tbody>
       </table>
+      <% } else { %>
+      <p>No URLs found</p>
       <% } %>
-    </div>
+    </div> -->
   </body>
 </html>
