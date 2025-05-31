@@ -1,15 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        text-align: center;
+        padding: 50px;
+      }
+      h1 {
+        color: #4caf50;
+      }
+      p {
+        font-size: 18px;
+      }
+      table {
+        margin: 20px auto;
+        border-collapse: collapse;
+        width: 80%;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      thead {
+        background-color: #4caf50;
+        color: white;
+      }
+    </style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home Page</title>
   </head>
   <body>
-    <h1>Hey from Server</h1>
+    <h1>URL Shortner</h1>
 
-    <% urls.forEach(url => { %>
-    <li><%= url.shortId %></li>
-    <% }) %>
+    <% if (locals.id) { %>
+    <p>URL Generated : http://localhost:8001/url/<%= id %></p>
+    <% } %>
+
+    <div>
+      <form action="/url" method="POST">
+        <label>Enter Your Original URL</label>
+        <input
+          type="text"
+          name="url"
+          placeholder="https://example.com"
+          required
+        />
+        <button type="submit" id="shortenButton">Shorten URL</button>
+      </form>
+    </div>
+
+    <div>
+      <pre><%= JSON.stringify(locals, null, 2) %></pre>
+      <%if (locals.urls) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>S.no</th>
+            <th>ShortID</th>
+            <th>Redirect</th>
+            <th>Clicks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% urls.forEach((url , index) =>{ %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td>
+              <a href="/url/<%= url.shortId %>" target="_blank">
+                <%= url.shortId %>
+              </a>
+            </td>
+            <td>
+              <a href="<%= url.redirectURL %>" target="_blank">
+                <%= url.redirectURL %>
+              </a>
+            </td>
+            <td><%= url.visitHistory.length %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } %>
+    </div>
   </body>
 </html>
