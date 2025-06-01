@@ -6,10 +6,16 @@ async function handleGenerateNewShortURL(req, res) {
   if (!body.url) return res.status(400).json({ error: "url is required" });
   const shortId = shortid();
 
+  // Set expiration date (7 days from now)
+  const expiresInDays = 7;
+  const expiresAt = new Date(Date.now() + expiresInDays * 24 * 60 * 60 * 1000);
+  // const expiresAt = new Date(Date.now() + 1 * 60 * 1000);//for testing purposes, set to 1 minute
+
   await URL.create({
     shortId: shortId,
     redirectURL: body.url,
     visitHistory: [],
+    expiresAt: expiresAt,
   });
 
   return res.render("home", {
