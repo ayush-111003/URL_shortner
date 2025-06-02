@@ -4,7 +4,7 @@ const { connectToMongoDB } = require("./connect.js");
 const URL = require("./models/url.js");
 
 const urlRoute = require("./routes/url.js");
-const staticRoute = require("./routes/static.js");
+const staticRoute = require("./routes/staticRouter.js");
 const userRoute = require("./routes/user.js");
 
 const app = express();
