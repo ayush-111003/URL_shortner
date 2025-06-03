@@ -16,6 +16,7 @@ async function handleGenerateNewShortURL(req, res) {
     redirectURL: body.url,
     visitHistory: [],
     expiresAt: expiresAt,
+    createdBy: req.user._id, // Assuming req.user is set by the auth middleware
   });
 
   return res.render("home", {
