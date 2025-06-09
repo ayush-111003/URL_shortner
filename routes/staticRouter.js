@@ -1,9 +1,10 @@
 const express = require("express");
 const URL = require("../models/url.js");
+const { restrictTo } = require("../middlewares/auth.js");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", restrictTo("NORMAL"), async (req, res) => {
   try {
     const allurls = await URL.find({});
     console.log("Route accessed");
